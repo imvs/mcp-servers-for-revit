@@ -20,7 +20,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          # server/package.json requires node >=20, and better-sqlite3 12.x ships no Node 18
+          # prebuilds, so npm ci on Node 18 falls back to a source build that fails on
+          # current windows-latest images. Node 22 matches the npm-publish job.
+          node-version: 22
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
