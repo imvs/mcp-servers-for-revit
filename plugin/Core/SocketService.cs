@@ -126,11 +126,15 @@ namespace revit_mcp_plugin.Core
                 };
                 _listenerThread.Start();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _isRunning = false;
                 _listener?.Stop();
                 _listener = null;
+
+                // Log the reason: without this the failure only reaches the ribbon button as a dialog,
+                // and the listener silently stays down.
+                _logger.Error("启动套接字服务失败: {0}\nFailed to start the socket service: {0}", ex.Message);
 
                 // Let the ribbon button report the failure (e.g. port already in use) instead of claiming success.
                 throw;
