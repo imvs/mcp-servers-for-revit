@@ -1,9 +1,26 @@
 <Project Sdk="Nice3point.Revit.Sdk/6.1.0">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <Configurations>Debug.R25;Debug.R26</Configurations>
-    <Configurations>$(Configurations);Release.R25;Release.R26</Configurations>
+    <Configurations>Debug.R25;Debug.R26;Debug.R27</Configurations>
+    <Configurations>$(Configurations);Release.R25;Release.R26;Release.R27</Configurations>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+      The test host resolves the Revit installation from the RevitInstallationPath assembly
+      attribute only, and falls back to "C:\Program Files\Autodesk\Revit {version}" when it is
+      absent. Override RevitInstallPath on the command line for a machine whose Revit lives
+      somewhere else, e.g. -p:RevitInstallPath="E:\software\Autodesk\Revit 2027".
+    -->
+    <RevitInstallPath Condition="'$(RevitInstallPath)' == ''">C:\Program Files\Autodesk\Revit $(RevitVersion)</RevitInstallPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="Nice3point.Revit.Injector.Attributes.RevitInstallationPathAttribute">
+      <_Parameter1>$(RevitInstallPath)</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
     <PackageReference Include="Nice3point.TUnit.Revit" Version="$(RevitVersion).*" />
